@@ -35,5 +35,5 @@ puts friend_idz
 rClient.follow(friend_idz - friend_ids)
 
 =begin
-At this point in the code, there are two things that have happened. You are following all of the people who follow your TARGET, AND you should now be following everyone whho your TARGET follows; both sides of the follow coin
+At this point in the code, there are two things that have happened. You are following all of the people who follow your TARGET, AND you should now be following everyone who your TARGET follows; both sides of the follow coin
 =end

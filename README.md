@@ -12,7 +12,7 @@ Order of execution
 1. grabber.rb
 2. parser.sh
 3. tweet_scrape_target.sh
-
+4. tweet__resolve_ids.sh
 
 Examples
 ========

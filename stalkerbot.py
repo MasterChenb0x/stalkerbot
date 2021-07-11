@@ -1,19 +1,18 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import sys
 import os
 import re
 import random
 import time
 import getopt
-from twython import Twython
+import tweepy
 
 #-- Twitter Instance setup
-apiKey = 'YOUR_TWITTER_API_KEY'
-apiSecret = 'YOUR_API_SECRET'
-accessToken = 'YOUR_ACCESS_TOKEN'
-accessTokenSecret = 'YOUR_ACCESS_TOKEN_SECRET'
+TWITTER = open("/home/chen/Documents/TwiTokens.txt", "r").read().splitlines()
+auth = tweepy.OAuthHandler(TWITTER[0], TWITTER[1])
+auth.set_access_token(TWITTER[2], TWITTER[3])
 
-api = Twython(apiKey,apiSecret,accessToken,accessTokenSecret)
+api = tweepy.API(auth, wait_on_rate_limit=True)
 #--
 
 '''
@@ -25,18 +24,35 @@ targetFollowers = []
 targetFriends = []
 
 # Get baseline friendlist
-Friends = api.get_friends_ids(screen_name='ShaolinChenple')
-myFriends = Friends['ids']
+myFriends = api.friends_ids(screen_name='<YOUR HANDLE')
+print("---My Friends---")
 print(myFriends)
 
 # Get list of followers of target
-Followers = api.get_followers_ids(screen_name='chenb0x')
-targetFollowers = Followers['ids']
+targetFollowers = api.followers_ids(screen_name='<YOUR TARGET')
+print("---Target Followers---")
+print(targetFollowers)
+
+# Get list of friends of target
+targetFriends = api.friends_ids(screen_name='<YOUR HANDLE>')
+print("---Target Friends---")
+print(targetFriends)
+
+print(len(myFriends))
+print(len(targetFollowers))
+print(len(targetFriends))
+target_scope = targetFollowers + targetFriends
+print(len(target_scope))
+
+
+to_follow = list(set(targetFollowers) - set(myFriends)) + list(set(myFriends) - set(targetFollowers))
+print(len(to_follow))
+
 for i in targetFollowers:
-	print(str(i))
-	try:
-		api.create_friendship(user_id=i)
-		time.sleep(20)
-	except:
-		pass
+    try:
+        api.create_friendship(user_id=i)
+        time.sleep(10) # avoid rate limit
+        print(f"Following: {i}")
+    except:
+        pass
 

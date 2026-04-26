@@ -1,22 +1,86 @@
 # StalkerBot
 
-Do not follow your target directly. Instead follow their followers and analyze social interaction without arousing suspicion from your target. What about their friends? Friends implies mutual following. You'd scrape their friends along with their followers.
+> **⚠️ Disclaimer:** This project exists to promote awareness of digital-recon capabilities. **Stalking is not ok.** Do not be a trash human being.
+
+## What is it?
+
+A lightweight, **single-file Python** tool for X.com (formerly Twitter) social reconnaissance.
+
+- **Follow a target's network** — identify and follow the followers & friends of any handle
+- **Search tweets by keyword** — scan a user's timeline for specific terms
+- **Resolve user IDs** — turn numeric X user IDs into readable screen names
+- **Parse tweet IDs from files** — extract 15–20 digit tweet IDs from messy dumps
+
+## Requirements
+
+| Dependency | Required | Notes |
+|-----------|----------|-------|
+| `python3` | ✅ Yes | 3.8+ recommended |
+| `requests` | ✅ Yes | `pip install requests` |
+| `tweepy`  | ❌ Optional | Enables API features (follow, search). Falls back gracefully without it. |
+
+```bash
+pip install requests tweepy
+```
+
+## Quick Start
+
+Create a credentials JSON file (or use a legacy 4-line TwiTokens.txt):
+
+```bash
+cat > ~/.stalkerbot_credentials.json <<EOF
+{
+    "consumer_key": "your_consumer_key",
+    "consumer_secret": "your_consumer_secret",
+    "access_token": "your_access_token",
+    "access_token_secret": "your_access_token_secret"
+}
+EOF
+```
+
+### Commands
+
+```bash
+chmod +x stalkerbot.py
+
+# Follow target's network (requires tweepy + API access)
+./stalkerbot.py follow -t TARGET_HANDLE -m MY_HANDLE --creds ~/.stalkerbot_credentials.json
+
+# Search a user's tweets for a keyword
+./stalkerbot.py search -t TARGET_HANDLE -k "secret"
+
+# Resolve user IDs to screen names
+./stalkerbot.py resolve ids.txt -o resolved.csv
+
+# Parse tweet IDs from files in a directory
+./stalkerbot.py parse ./raw_tweets/
+```
 
 
-by MasterChen
--------------
-7/11/2021: Added python script
-7/28/2015: Added sanitized files in preparation for DC Skytalks
+## X.com Migration Notes (v2.0)
 
+- **Upgraded** all URLs from `twitter.com` to `x.com`
+- **Unified** `grabber.rb`, `stalkerbot.py`, `parser.sh`, `tweet_scrape_target.sh`, and `tweet_resolve_ids.sh` into a single Python file
+- **Graceful degradation** — features work without API access (HTTP fallbacks + guidance)
+- **Added** `--dry-run` flag to preview actions without executing
+- **Added** CSV output for ID resolution
 
+## X.com API Reality Check (2026)
 
-Order of execution
-==================
-1. grabber.rb OR stalkerbot.py
-2. parser.sh
-3. tweet_scrape_target.sh
-4. tweet__resolve_ids.sh
+X (formerly Twitter) now requires **paid API tiers** for most operations:
 
-DISCLAIMER
-==================
-This project is not to condone cyberstalking, but rather to promote awareness of such capabilities and techniques. Do NOT be a trash human being. Stalking is NOT ok.
+| Feature | Free Tier | Basic ($100/mo) |
+|---------|-----------|-----------------|
+| Write tweets | 1500/mo | 3000/mo |
+| User lookup | Limited | 10,000/mo |
+| Followers lookup | ❌ **Not available** | ✅ Available |
+
+For the `follow` feature to work, you need **at least Basic tier** access and valid `consumer_key` / `consumer_secret` / `access_token` / `access_token_secret`.
+
+## Historical Archive
+
+| Date | Milestone |
+|------|-----------|
+| 2026-04-26 | v2.0 — migrated to x.com, unified codebase to Python 3 |
+| 2021-07-11 | v1.2 — added Python script |
+| 2015-07-28 | v1.0 — sanitized files for DC Skytalks |

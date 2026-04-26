@@ -1,0 +1,11 @@
+# StalkerBot v2.0 — Python Requirements
+#
+# Install everything:
+#     pip install -r requirements.txt
+#
+# The minimal runtime only needs `requests`.
+# `tweepy` unlocks API-powered features (follow, tweet search) but is not
+# required for HTTP fallbacks such as ID resolution.
+
+requests>=2.25.0           # required – HTTP fallback for ID resolution, scraping hints
+tweepy>=4.14.0             # optional – X API v1.1 / v2 (write/follow/search)
